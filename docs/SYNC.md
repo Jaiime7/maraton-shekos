@@ -15,8 +15,9 @@
 ---
 
 ## 2. Decisiones Técnicas Cerradas
+- **Dinámica de carrera:** Ruta única de **6 km en forma de corazón**. Fernando y Carla corren juntos acompañados por **7 amigos en estilo bola de nieve**.
+- **Quién lleva la app:** El **Guía del Km 0** (`role: 'guide'`) es el único que emite ubicación GPS y desbloquea checkpoints. Los amigos (`role: 'friend'`) abren la app en **solo lectura** para seguir en vivo por dónde viene la bola de nieve.
 - **Motor de mapa:** Google Maps JavaScript API vía `@vis.gl/react-google-maps`. No desmontar `<Map>` al actualizar coordenadas GPS (evita consumir cargas extra de cuota).
-- **Escritura de GPS:** Solo los perfiles `fernando` y `carla` escriben `currentLocation` en Supabase. El rol `friend` es **solo lectura** para evitar saltos de pin entre los 7 amigos.
 - **Compatibilidad iOS Safari:**
   - `navigator.vibrate()` no existe en iOS → acompañarlo siempre de feedback visual/animación.
   - Al volver a la pestaña tras bloquear o usar la cámara (`visibilitychange`), re-solicitar `Wake Lock` y re-sincronizar estado.
@@ -31,10 +32,10 @@ Ambos módulos consumen tipos de `src/types/marathon.ts`:
 ```typescript
 // Componente de Dev A (src/features/map/)
 export interface HeartMapProps {
-  activeSide: RouteSide;
+  role: UserRole; // Solo 'guide' emite GPS; 'friend' es solo lectura
   raceState: RaceState;
   checkpoints: Checkpoint[];
-  routes: Record<RouteSide, RouteGeometry>;
+  route: RouteGeometry;
   onLocationUpdate?: (coords: Coordinates, distanceToNextMeters: number) => void;
   onCheckpointReached?: (checkpoint: Checkpoint) => void;
 }
@@ -42,10 +43,10 @@ export interface HeartMapProps {
 // Componente de Dev B (src/features/player/)
 export interface RacePanelProps {
   session: PlayerSession;
-  teamProgress: TeamProgress;
+  progress: RaceProgress;
   nextCheckpoint: Checkpoint | null;
   checkpoints: Checkpoint[];
-  onManualUnlock: (checkpoint: Checkpoint) => void;
+  onManualUnlock?: (checkpoint: Checkpoint) => void; // Solo visible/activo para 'guide'
 }
 ```
 
@@ -59,4 +60,4 @@ export interface RacePanelProps {
 ---
 
 ## 5. Avisos y Notas de Cruce
-- **Día 1 (Jaime):** Base del proyecto creada, `src/types/marathon.ts` congelado y `.env.example` listo. Arrancando Bloque 1 de Dev B con mocks.
+- **Día 1 (Jaime):** Cambiamos la dinámica a **ruta única de 6 km en corazón** (todos juntos, 7 amigos en bola de nieve, Guía Km 0 emitiendo GPS y amigos en vivo en solo lectura). Contratos en `src/types/marathon.ts` actualizados y sincronizados en `main` y `dev`.

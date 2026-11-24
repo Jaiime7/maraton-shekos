@@ -1,5 +1,4 @@
-export type RouteSide = 'fernando' | 'carla';
-export type UserRole = 'fernando' | 'carla' | 'friend' | 'staff';
+export type UserRole = 'guide' | 'friend' | 'staff';
 export type CheckpointType = 'friend' | 'digital' | 'finish';
 
 export interface Coordinates {
@@ -9,8 +8,7 @@ export interface Coordinates {
 
 export interface Checkpoint {
   id: string;
-  side: RouteSide | 'shared';
-  kilometer: number; // 1 to 6
+  kilometer: number; // 1 to 6 (supports decimals, e.g. 1.5)
   title: string;
   clue: string;
   coordinates: Coordinates;
@@ -26,19 +24,16 @@ export interface Checkpoint {
 export type RaceStatus = 'not_started' | 'running' | 'paused' | 'finished';
 
 export interface RouteGeometry {
-  side: RouteSide;
-  path: Coordinates[]; // Ordered polyline for one half of the heart (6 km)
+  path: Coordinates[]; // Ordered polyline of the complete 6 km heart
 }
 
 export interface PlayerSession {
   role: UserRole;
-  side?: RouteSide;
   dorsalNumber: string;
   displayName: string;
 }
 
-export interface TeamProgress {
-  side: RouteSide;
+export interface RaceProgress {
   currentKilometer: number; // 0 to 6
   completedCheckpointIds: string[];
   currentLocation: Coordinates | null;
@@ -49,14 +44,12 @@ export interface TeamProgress {
 }
 
 export interface ForcedCheckpointEvent {
-  side: RouteSide;
   checkpointId: string;
   triggeredAt: string; // ISO timestamp
 }
 
 export interface RaceState {
   status: RaceStatus;
-  fernando: TeamProgress;
-  carla: TeamProgress;
+  progress: RaceProgress;
   forcedCheckpointEvent?: ForcedCheckpointEvent | null;
 }

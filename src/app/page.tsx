@@ -8,14 +8,14 @@ export default function HomePage() {
           Fernando &amp; Carla
         </h1>
         <p className="text-base text-neutral-600">
-          ¿Eres Fernando o eres Carla?
+          Maratón Sorpresa — 6 km en forma de corazón
         </p>
         <div className="mt-4 flex flex-col gap-3">
           <Link
             href="/run"
             className="flex min-h-12 items-center justify-center rounded-xl bg-rose-600 px-6 py-3 font-semibold text-white"
           >
-            Ir a la carrera (Demo)
+            Entrar a la carrera (Demo)
           </Link>
         </div>
       </div>
