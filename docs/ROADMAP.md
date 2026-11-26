@@ -38,8 +38,8 @@
 - [x] Construir Pantalla 1 (`/`) de selección de rol: **Guía Km 0**, **Pelotón (Ver en vivo)** y **Acceso Staff**
 - [x] Implementar hook de `Wake Lock API` con recuperación automática en `visibilitychange`
 - [x] Construir tarjeta inferior de `/run` (35% pantalla): dorsal, cronómetro, progreso (`X,X / 6,0 km`), distancia al siguiente checkpoint, pista, barra de pelotón (7 amigos B/N → color) y botón *"Ya estoy aquí"* (solo Guía)
-- [ ] Construir Modal de Checkpoint Desbloqueado (`friend` y `digital`) con `canvas-confetti` y vibración (con fallback visual para iOS)
-- [ ] Construir tarjeta/pantalla de Gran Final (Km 6 — *Finisher*)
+- [x] Construir Modal de Checkpoint Desbloqueado (`friend` y `digital`) con `canvas-confetti` y vibración (con fallback visual para iOS)
+- [x] Construir tarjeta/pantalla de Gran Final (Km 6 — *Finisher*)
 
 ### Semana 2 — Supabase, Realtime y Seguridad Staff
 - [ ] Diseñar y crear tablas en Supabase + habilitar Realtime (documentar esquema en `docs/SYNC.md`)

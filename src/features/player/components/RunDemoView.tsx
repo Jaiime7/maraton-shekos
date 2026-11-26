@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { CheckpointModal, FinisherCard } from "@/features/checkpoints";
 import {
   INITIAL_MOCK_RACE_STATE,
   MOCK_CHECKPOINTS,
@@ -18,6 +19,10 @@ import { RacePanel } from "./RacePanel";
 export function RunDemoView() {
   const { session } = usePlayerSession();
   const [raceState, setRaceState] = useState<RaceState>(INITIAL_MOCK_RACE_STATE);
+  const [activeCheckpoint, setActiveCheckpoint] = useState<Checkpoint | null>(
+    null,
+  );
+  const [showFinisher, setShowFinisher] = useState(false);
 
   const isGuide = session?.role === "guide";
   const { isActive: wakeLockActive } = useWakeLock(
@@ -79,6 +84,12 @@ export function RunDemoView() {
         },
       };
     });
+
+    if (checkpoint.type === "finish") {
+      setShowFinisher(true);
+    } else {
+      setActiveCheckpoint(checkpoint);
+    }
   };
 
   if (!session) {
@@ -129,6 +140,16 @@ export function RunDemoView() {
             Iniciar carrera (Mock)
           </button>
         )}
+
+        {raceState.status === "finished" && !showFinisher && (
+          <button
+            type="button"
+            onClick={() => setShowFinisher(true)}
+            className="flex min-h-12 cursor-pointer items-center justify-center rounded-xl bg-neutral-950 px-5 text-sm font-extrabold text-white shadow-sm hover:bg-neutral-800"
+          >
+            Ver tarjeta Finisher
+          </button>
+        )}
       </div>
 
       {/* Bottom RacePanel (Dev B) */}
@@ -142,6 +163,21 @@ export function RunDemoView() {
           wakeLockActive={wakeLockActive}
         />
       </div>
+
+      {/* Checkpoint Unlocked Modal (Dev B) */}
+      <CheckpointModal
+        checkpoint={activeCheckpoint}
+        onContinue={() => setActiveCheckpoint(null)}
+      />
+
+      {/* Km 6 Finisher Card (Dev B) */}
+      {showFinisher && (
+        <FinisherCard
+          progress={raceState.progress}
+          checkpoints={MOCK_CHECKPOINTS}
+          onViewMap={() => setShowFinisher(false)}
+        />
+      )}
     </main>
   );
 }
